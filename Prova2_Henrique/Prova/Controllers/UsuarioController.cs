@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Prova.Models;
+using Prova.DTOs;
 using Prova.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+
 
 namespace Prova.Controllers {
 	[ApiController]
@@ -48,41 +50,48 @@ namespace Prova.Controllers {
 		}
 
 
-		[HttpPut("{id}")]
-		public async Task<IActionResult> AtualizarUsuario(int id, [FromBody] Usuario usuarioAtualizado) {
-			if (usuarioAtualizado == null) {
-				return BadRequest("Dados do usuário não fornecidos.");
-			}
+        [HttpPut("{email}")]
+        public async Task<IActionResult> AtualizarUsuario(string email, [FromBody] UsuarioAtualizacaoDTO usuarioAtualizado)
+        {
+            if (usuarioAtualizado == null)
+            {
+                return BadRequest("Dados do usuário não fornecidos.");
+            }
 
-			var usuarioExistente = await _context.Usuarios.FindAsync(id);
-			if (usuarioExistente == null) {
-				return NotFound("Usuário não encontrado.");
-			}
+            var usuarioExistente = await _context.Usuarios.FirstOrDefaultAsync(u => u.Email == email);
+            if (usuarioExistente == null)
+            {
+                return NotFound("Usuário não encontrado.");
+            }
 
-			usuarioExistente.Nome = usuarioAtualizado.Nome;
-			usuarioExistente.Sobrenome = usuarioAtualizado.Sobrenome;
-			usuarioExistente.Telefone = usuarioAtualizado.Telefone;
-			usuarioExistente.Email = usuarioAtualizado.Email;
-			usuarioExistente.Senha = usuarioAtualizado.Senha;
+            usuarioExistente.Nome = usuarioAtualizado.Nome;
+            usuarioExistente.Sobrenome = usuarioAtualizado.Sobrenome;
+            usuarioExistente.Telefone = usuarioAtualizado.Telefone;
+            usuarioExistente.Senha = usuarioAtualizado.Senha;
 
-			if (usuarioAtualizado.Enderecos != null && usuarioAtualizado.Enderecos.Count > 0) {
-				var enderecosExistentes = await _context.Enderecos.Where(e => e.UsuarioId == usuarioExistente.Id).ToListAsync();
-				_context.Enderecos.RemoveRange(enderecosExistentes);
+            if (usuarioAtualizado.Enderecos != null && usuarioAtualizado.Enderecos.Count > 0)
+            {
+                var enderecosExistentes = await _context.Enderecos.Where(e => e.UsuarioId == usuarioExistente.Id).ToListAsync();
+                _context.Enderecos.RemoveRange(enderecosExistentes);
 
-				foreach (var endereco in usuarioAtualizado.Enderecos) {
-					if (string.IsNullOrEmpty(endereco.Cep) || string.IsNullOrEmpty(endereco.Cidade) || string.IsNullOrEmpty(endereco.Estado)) {
-						return BadRequest("Dados de endereço inválidos.");
-					}
+                foreach (var endereco in usuarioAtualizado.Enderecos)
+                {
+                    if (string.IsNullOrEmpty(endereco.Cep) || string.IsNullOrEmpty(endereco.Cidade) || string.IsNullOrEmpty(endereco.Estado))
+                    {
+                        return BadRequest("Dados de endereço inválidos.");
+                    }
 
-					endereco.UsuarioId = usuarioExistente.Id; 
-					_context.Enderecos.Add(endereco);
-				}
-			}
+                    endereco.UsuarioId = usuarioExistente.Id;
+                    _context.Enderecos.Add(endereco);
+                }
+            }
 
-			await _context.SaveChangesAsync(); 
+            await _context.SaveChangesAsync();
 
-			return NoContent(); 
-		}
+            return NoContent();
+        }
+
+
 
         [HttpGet("login")]
         public async Task<IActionResult> GetUsuarioPorEmailSenha([FromQuery] string email, [FromQuery] string senha)
@@ -101,7 +110,7 @@ namespace Prova.Controllers {
                 return Unauthorized("Email ou senha inválidos.");
             }
 
-            return Ok(usuario); // Use Ok() para retornar o usuario
+            return Ok(usuario);
         }
 
     }
