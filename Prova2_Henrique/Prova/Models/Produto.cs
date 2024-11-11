@@ -1,43 +1,30 @@
-using Microsoft.EntityFrameworkCore;
-using Prova.Models;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Prova.Data
+namespace Prova.Models
 {
-    public class AppDbContext : DbContext
+    public class Produto
     {
-        public DbSet<Usuario> Usuarios { get; set; }
-        public DbSet<Endereco> Enderecos { get; set; }
-        public DbSet<Produto> Produtos { get; set; }
-        public DbSet<Marca> Marcas { get; set; } // DbSet para Marca
+        [Key]
+        [JsonIgnore]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
 
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+        public string Nome { get; set; } = string.Empty;
+        public string Descricao { get; set; } = string.Empty;
+        public string Preco { get; set; } = string.Empty;
+        public string IdMarca { get; set; } = string.Empty;
+
+
+        public Produto() { }
+
+        public Produto(string nome, string descricao, string preco)
         {
-        }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            // Relacionamento Endereço-Usuário
-            modelBuilder.Entity<Endereco>()
-                .HasOne(e => e.Usuario)
-                .WithMany(u => u.Enderecos)
-                .HasForeignKey(e => e.UsuarioId);
-
-            modelBuilder.Entity<Endereco>()
-                .Property(e => e.Id)
-                .ValueGeneratedOnAdd();
-
-            // Relacionamento Produto-Marca (Um Produto tem uma Marca)
-            modelBuilder.Entity<Produto>()
-                .HasOne(p => p.Marca)         // Produto tem uma Marca
-                .WithMany(m => m.Produtos)    // Marca tem muitos Produtos
-                .HasForeignKey(p => p.MarcaId); // Chave estrangeira do Produto para Marca
-
-            // Propriedades
-            modelBuilder.Entity<Produto>()
-                .Property(p => p.Id)
-                .ValueGeneratedOnAdd();
-
-            base.OnModelCreating(modelBuilder);
+            Nome = nome;
+            Descricao = descricao;
+            Preco = preco;
         }
     }
 }
