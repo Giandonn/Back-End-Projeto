@@ -69,19 +69,25 @@ namespace Prova.Controllers {
             usuarioExistente.Telefone = usuarioAtualizado.Telefone;
             usuarioExistente.Senha = usuarioAtualizado.Senha;
 
+            // Verifique os endereços e remova os antigos se necessário
             if (usuarioAtualizado.Enderecos != null && usuarioAtualizado.Enderecos.Count > 0)
             {
+                // Remover os endereços existentes
                 var enderecosExistentes = await _context.Enderecos.Where(e => e.UsuarioId == usuarioExistente.Id).ToListAsync();
                 _context.Enderecos.RemoveRange(enderecosExistentes);
 
-                foreach (var endereco in usuarioAtualizado.Enderecos)
+                foreach (var enderecoDTO in usuarioAtualizado.Enderecos)
                 {
-                    if (string.IsNullOrEmpty(endereco.Cep) || string.IsNullOrEmpty(endereco.Cidade) || string.IsNullOrEmpty(endereco.Estado))
+                    // Aqui você converte o EnderecoDTO para um Endereco (Modelo)
+                    var endereco = new Endereco
                     {
-                        return BadRequest("Dados de endereço inválidos.");
-                    }
+                        Cep = enderecoDTO.Cep,
+                        Cidade = enderecoDTO.Cidade,
+                        Estado = enderecoDTO.Estado,
+                        UsuarioId = usuarioExistente.Id // Relaciona o endereço ao usuário
+                    };
 
-                    endereco.UsuarioId = usuarioExistente.Id;
+                    // Adiciona o novo endereço no contexto
                     _context.Enderecos.Add(endereco);
                 }
             }
