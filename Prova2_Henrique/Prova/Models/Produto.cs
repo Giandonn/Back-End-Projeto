@@ -16,12 +16,10 @@ namespace Prova.Models
         public string Descricao { get; set; } = string.Empty;
         public string Preco { get; set; } = string.Empty;
 
-        // Adicionando a chave estrangeira para Marca
-        public int IdMarca { get; set; }  // A propriedade IdMarca para armazenar o ID da Marca
+        public int IdMarca { get; set; } 
 
-        // Propriedade de navegação para a classe Marca
         [ForeignKey("IdMarca")]
-        public Marca? Marca { get; set; }  // Tornar a propriedade anulável
+        public Marca? Marca { get; set; }
 
         public Produto() { }
 

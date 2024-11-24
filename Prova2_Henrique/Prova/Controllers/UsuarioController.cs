@@ -20,7 +20,7 @@ namespace Prova.Controllers {
 		[HttpPost]
 		public async Task<IActionResult> CriarUsuario([FromBody] Usuario usuario) {
 			if (usuario == null) {
-				return BadRequest("Dados do usuário não fornecidos.");
+				return BadRequest("Dados do usuï¿½rio nï¿½o fornecidos.");
 			}
 
 			if (!ModelState.IsValid) {
@@ -29,7 +29,7 @@ namespace Prova.Controllers {
 
 			var emailExistente = await _context.Usuarios.AnyAsync(u => u.Email == usuario.Email);
 			if (emailExistente) {
-				return Conflict("Já existe um usuário com este email.");
+				return Conflict("Jï¿½ existe um usuï¿½rio com este email.");
 			}
 
 			try {
@@ -55,13 +55,13 @@ namespace Prova.Controllers {
         {
             if (usuarioAtualizado == null)
             {
-                return BadRequest("Dados do usuário não fornecidos.");
+                return BadRequest("Dados do usuï¿½rio nï¿½o fornecidos.");
             }
 
             var usuarioExistente = await _context.Usuarios.FirstOrDefaultAsync(u => u.Email == email);
             if (usuarioExistente == null)
             {
-                return NotFound("Usuário não encontrado.");
+                return NotFound("Usuï¿½rio nï¿½o encontrado.");
             }
 
             usuarioExistente.Nome = usuarioAtualizado.Nome;
@@ -69,25 +69,21 @@ namespace Prova.Controllers {
             usuarioExistente.Telefone = usuarioAtualizado.Telefone;
             usuarioExistente.Senha = usuarioAtualizado.Senha;
 
-            // Verifique os endereços e remova os antigos se necessário
             if (usuarioAtualizado.Enderecos != null && usuarioAtualizado.Enderecos.Count > 0)
             {
-                // Remover os endereços existentes
                 var enderecosExistentes = await _context.Enderecos.Where(e => e.UsuarioId == usuarioExistente.Id).ToListAsync();
                 _context.Enderecos.RemoveRange(enderecosExistentes);
 
                 foreach (var enderecoDTO in usuarioAtualizado.Enderecos)
                 {
-                    // Aqui você converte o EnderecoDTO para um Endereco (Modelo)
                     var endereco = new Endereco
                     {
                         Cep = enderecoDTO.Cep,
                         Cidade = enderecoDTO.Cidade,
                         Estado = enderecoDTO.Estado,
-                        UsuarioId = usuarioExistente.Id // Relaciona o endereço ao usuário
+                        UsuarioId = usuarioExistente.Id
                     };
 
-                    // Adiciona o novo endereço no contexto
                     _context.Enderecos.Add(endereco);
                 }
             }
@@ -104,7 +100,7 @@ namespace Prova.Controllers {
         {
             if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(senha))
             {
-                return BadRequest("Email e senha são obrigatórios.");
+                return BadRequest("Email e senha sï¿½o obrigatï¿½rios.");
             }
 
             var usuario = await _context.Usuarios
@@ -113,7 +109,7 @@ namespace Prova.Controllers {
 
             if (usuario == null)
             {
-                return Unauthorized("Email ou senha inválidos.");
+                return Unauthorized("Email ou senha invï¿½lidos.");
             }
 
             return Ok(usuario);
