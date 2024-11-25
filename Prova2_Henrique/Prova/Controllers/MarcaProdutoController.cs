@@ -30,7 +30,7 @@ namespace Prova.Controllers
         [HttpGet("marcas/{id}")]
         public async Task<ActionResult<Marca>> GetMarcaById(int id)
         {
-            var marca = await _marcaService.GetByIdAsync(id);  // Usar _marcaService aqui
+            var marca = await _marcaService.GetByIdAsync(id);
             if (marca == null)
             {
                 return NotFound();

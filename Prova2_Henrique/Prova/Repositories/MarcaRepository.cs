@@ -20,10 +20,9 @@ namespace Prova.Repositories
             return await _context.Marcas.ToListAsync();
         }
 
-        // Ajustando GetByIdAsync para suportar nulos
         public async Task<Marca?> GetByIdAsync(int id)
         {
-            return await _context.Marcas.FindAsync(id);  // Pode retornar null
+            return await _context.Marcas.FindAsync(id);
         }
 
         public async Task<Marca> AddAsync(Marca marca)

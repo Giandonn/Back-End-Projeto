@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using Prova.Data;  // Verifique se o namespace correto está sendo utilizado
+using Prova.Data;
 using Prova.Models;
-using System;  // Necessário para a interface IDisposable
+using System;
 using Xunit;
 
 namespace ProvaTestes
@@ -10,7 +10,6 @@ namespace ProvaTestes
     {
         private readonly AppDbContext _context;
 
-        // Construtor único para inicialização do contexto
         public AppDbContextTests()
         {
             var options = new DbContextOptionsBuilder<AppDbContext>()
@@ -18,7 +17,7 @@ namespace ProvaTestes
                 .Options;
 
             _context = new AppDbContext(options);
-            _context.Database.EnsureCreated(); // Garante que o banco de dados seja criado
+            _context.Database.EnsureCreated();
         }
 
         [Fact]
@@ -50,7 +49,6 @@ namespace ProvaTestes
             Assert.Equal("Lucas", savedUser.Nome);
         }
 
-        // Implementação do IDisposable para liberar recursos
         public void Dispose()
         {
             _context?.Dispose();

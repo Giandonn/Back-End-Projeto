@@ -4,11 +4,9 @@
 
 namespace Prova.Migrations
 {
-    /// <inheritdoc />
     public partial class secondCreate : Migration
     {
-        /// <inheritdoc />
-        protected override void Up(MigrationBuilder migrationBuilder)
+            protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
                 name: "Marcas",
@@ -51,8 +49,7 @@ namespace Prova.Migrations
                 column: "IdMarca");
         }
 
-        /// <inheritdoc />
-        protected override void Down(MigrationBuilder migrationBuilder)
+            protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
                 name: "Produtos");
