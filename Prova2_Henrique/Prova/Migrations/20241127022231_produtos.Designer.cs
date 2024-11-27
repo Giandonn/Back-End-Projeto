@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Prova.Data;
 
@@ -11,9 +12,11 @@ using Prova.Data;
 namespace Prova.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241127022231_produtos")]
+    partial class produtos
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -136,29 +139,6 @@ namespace Prova.Migrations
                     b.ToTable("Usuarios");
                 });
 
-            modelBuilder.Entity("Prova.Models.listaDeProdutosPorCliente", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ProdutoId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UsuarioId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProdutoId");
-
-                    b.HasIndex("UsuarioId");
-
-                    b.ToTable("ListaDeProdutosPorClientes");
-                });
-
             modelBuilder.Entity("Prova.Models.Endereco", b =>
                 {
                     b.HasOne("Prova.Models.Usuario", "Usuario")
@@ -183,25 +163,6 @@ namespace Prova.Migrations
                         .HasForeignKey("MarcaId");
 
                     b.Navigation("Marca");
-                });
-
-            modelBuilder.Entity("Prova.Models.listaDeProdutosPorCliente", b =>
-                {
-                    b.HasOne("Prova.Models.Produto", "Produto")
-                        .WithMany()
-                        .HasForeignKey("ProdutoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Prova.Models.Usuario", "Usuario")
-                        .WithMany()
-                        .HasForeignKey("UsuarioId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Produto");
-
-                    b.Navigation("Usuario");
                 });
 
             modelBuilder.Entity("Prova.Models.Usuario", b =>

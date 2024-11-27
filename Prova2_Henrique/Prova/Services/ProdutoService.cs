@@ -28,5 +28,10 @@ namespace Prova.Services
         {
             return await _produtoRepository.AddAsync(produto);
         }
+
+        public async Task DeleteAllAsync()
+        {
+            await _produtoRepository.DeleteAllAsync(); 
+        }
     }
 }

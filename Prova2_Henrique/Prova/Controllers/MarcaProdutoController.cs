@@ -71,5 +71,12 @@ namespace Prova.Controllers
             return CreatedAtAction(nameof(GetProdutoById), new { id = newProduto.Id }, newProduto);
         }
 
+        [HttpDelete("produtos")]
+        public async Task<IActionResult> DeleteAllProdutos()
+        {
+            await _produtoService.DeleteAllAsync();
+            return NoContent(); 
+        }
+
     }
 }

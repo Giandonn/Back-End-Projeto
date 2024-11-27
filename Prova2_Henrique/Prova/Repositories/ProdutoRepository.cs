@@ -17,7 +17,7 @@ namespace Prova.Repositories
 
         public async Task<IEnumerable<Produto>> GetAllAsync()
         {
-            return await _context.Produtos.Include(p => p.Marca).ToListAsync();  
+            return await _context.Produtos.Include(p => p.Marca).ToListAsync();
         }
 
         public async Task<Produto> GetByIdAsync(int id)
@@ -30,6 +30,16 @@ namespace Prova.Repositories
             _context.Produtos.Add(produto);
             await _context.SaveChangesAsync();
             return produto;
+        }
+
+        public async Task DeleteAllAsync()
+        {
+            var produtos = await _context.Produtos.ToListAsync();
+            if (produtos != null && produtos.Count > 0)
+            {
+                _context.Produtos.RemoveRange(produtos);
+                await _context.SaveChangesAsync(); 
+            }
         }
     }
 }
