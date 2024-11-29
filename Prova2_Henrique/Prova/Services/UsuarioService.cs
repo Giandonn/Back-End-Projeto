@@ -36,6 +36,7 @@ namespace Prova.Services
                 Senha = usuarioDto.Senha,
                 Cpf = usuarioDto.Cpf,
                 Email = usuarioDto.Email,
+                Cep = usuarioDto.Cep
             };
 
             if (usuarioDto.Imagem != null)
@@ -58,8 +59,6 @@ namespace Prova.Services
             };
         }
 
-
-
         public async Task AtualizarUsuario(string email, UsuarioAtualizacaoDTO usuarioAtualizado)
         {
             var usuarioExistente = await _usuarioRepository.GetPorEmailAssincrono(email);
@@ -71,22 +70,8 @@ namespace Prova.Services
             usuarioExistente.Telefone = usuarioAtualizado.Telefone;
             usuarioExistente.Senha = usuarioAtualizado.Senha;
 
-            if (usuarioAtualizado.Enderecos != null && usuarioAtualizado.Enderecos.Count > 0)
-            {
-                var enderecosExistentes = usuarioExistente.Enderecos.ToList();
-                usuarioExistente.Enderecos.Clear();
-                foreach (var enderecoDTO in usuarioAtualizado.Enderecos)
-                {
-                    var endereco = new Endereco
-                    {
-                        Cep = enderecoDTO.Cep,
-                        Cidade = enderecoDTO.Cidade,
-                        Estado = enderecoDTO.Estado,
-                        UsuarioId = usuarioExistente.Id
-                    };
-                    usuarioExistente.Enderecos.Add(endereco);
-                }
-            }
+            // Atualizando o CEP, não há mais endereços para manipular
+            usuarioExistente.Cep = usuarioAtualizado.Cep;
 
             await _usuarioRepository.UpdateAsync(usuarioExistente);
         }
@@ -102,6 +87,7 @@ namespace Prova.Services
 
             string tokenStatus = _jwtService.ValidarToken(token);
 
+            // Não há mais endereços, então vamos retornar apenas os dados básicos
             return new Usuario
             {
                 Id = usuario.Id,
@@ -110,8 +96,8 @@ namespace Prova.Services
                 Telefone = usuario.Telefone,
                 Email = usuario.Email,
                 Cpf = usuario.Cpf,
-                Enderecos = usuario.Enderecos,
-                ImagemBase64 = usuario.ImagemBase64,
+                Cep = usuario.Cep, // Retornando o CEP
+                ImagemBase64 = usuario.ImagemBase64
             };
         }
 

@@ -6,7 +6,6 @@ namespace Prova.Data
     public class AppDbContext : DbContext
     {
         public DbSet<Usuario> Usuarios { get; set; }
-        public DbSet<Endereco> Enderecos { get; set; }
         public DbSet<Marca> Marcas { get; set; }
         public DbSet<Produto> Produtos { get; set; }
 
@@ -16,14 +15,8 @@ namespace Prova.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Endereco>()
-                .HasOne(e => e.Usuario)
-                .WithMany(u => u.Enderecos)
-                .HasForeignKey(e => e.UsuarioId);
+         
 
-            modelBuilder.Entity<Endereco>()
-                .Property(e => e.Id)
-                .ValueGeneratedOnAdd();
 
             modelBuilder.Entity<Produto>()
                 .HasOne<Marca>()

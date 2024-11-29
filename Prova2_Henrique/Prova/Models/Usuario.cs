@@ -18,7 +18,9 @@ public class Usuario
     public string Senha { get; set; } = string.Empty;
 
     public string Cpf { get; set; } = string.Empty;
-    public List<Endereco> Enderecos { get; set; } = new List<Endereco>();
+
+    public string Cep { get; set; } = string.Empty;
+
     public DateTime DataNascimento { get; set; }
 
     [NotMapped]
@@ -31,7 +33,7 @@ public class Usuario
 
     public Usuario() { }
 
-    public Usuario(string nome, string sobrenome, string telefone, string email, string senha, DateTime dataNascimento, string cpf)
+    public Usuario(string nome, string sobrenome, string telefone, string email, string senha, DateTime dataNascimento, string cpf, string cep)
     {
         Nome = nome;
         Sobrenome = sobrenome;
@@ -40,5 +42,6 @@ public class Usuario
         Senha = senha;
         DataNascimento = dataNascimento;
         Cpf = cpf;
+        Cep = cep;
     }
 }

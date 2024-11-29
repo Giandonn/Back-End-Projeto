@@ -20,7 +20,6 @@ namespace Prova.Repositories
         public async Task<Usuario> GetPorEmailAssincrono(string email)
         {
             return await _context.Usuarios
-                .Include(u => u.Enderecos)
                 .FirstOrDefaultAsync(u => u.Email == email);
         }
 

@@ -10,7 +10,7 @@ namespace Prova.Services
         public string Telefone { get; set; }
         public string Email { get; set; }
         public string Cpf { get; set; }
-        public List<Endereco> Enderecos { get; set; }
+        public string Cep { get; set; } = string.Empty;
         public string ImagemBase64 { get; set; }
         public string Token { get; set; }
     }
