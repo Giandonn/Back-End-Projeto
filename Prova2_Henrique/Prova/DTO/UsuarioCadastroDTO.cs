@@ -19,9 +19,7 @@ namespace Prova.DTOs
         [JsonIgnore]
         public IFormFile? Imagem { get; set; }
 
-        public List<Endereco> Enderecos { get; set; } = new List<Endereco>();
-
-
+        public List<EnderecoDTO> Enderecos { get; set; } = new List<EnderecoDTO>();
 
     }
 }

@@ -22,6 +22,12 @@ builder.Services.AddScoped<ProdutoRepository>();
 builder.Services.AddScoped<MarcaService>();
 builder.Services.AddScoped<ProdutoService>();
 
+// Registro do UsuarioRepository
+builder.Services.AddScoped<UsuarioRepository>(); // Adicionando o registro do UsuarioRepository
+
+// Registro do UsuarioService
+builder.Services.AddScoped<UsuarioService>(); // Registro do UsuarioService
+
 // Registro do JwtTokenService
 builder.Services.AddSingleton<JwtService>(); // Registro do JwtTokenService
 
