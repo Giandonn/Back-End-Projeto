@@ -2,7 +2,6 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
-using Swashbuckle.AspNetCore.Annotations;
 
 public class Usuario
 {

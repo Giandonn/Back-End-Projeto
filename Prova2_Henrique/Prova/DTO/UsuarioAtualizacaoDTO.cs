@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using Prova.Models;
 
 namespace Prova.DTOs
 {

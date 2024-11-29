@@ -1,8 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Prova.Models;
 using Prova.Services;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Prova.Controllers
 {
@@ -18,14 +16,14 @@ namespace Prova.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Marca>>> GetAllMarcas()
+        public async Task<ActionResult<IEnumerable<Marca>>> GetTodasMarcas()
         {
             var marcas = await _marcaService.GetAllAsync();
             return Ok(marcas);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Marca>> GetMarcaById(int id)
+        public async Task<ActionResult<Marca>> GetMarcaPorId(int id)
         {
             var marca = await _marcaService.GetByIdAsync(id);
             if (marca == null)
@@ -38,8 +36,8 @@ namespace Prova.Controllers
         [HttpPost]
         public async Task<ActionResult<Marca>> CreateMarca(Marca marca)
         {
-            var newMarca = await _marcaService.AddAsync(marca);
-            return CreatedAtAction(nameof(GetMarcaById), new { id = newMarca.Id }, newMarca);
+            var novaMarca = await _marcaService.AddAsync(marca);
+            return CreatedAtAction(nameof(GetMarcaPorId), new { id = novaMarca.Id }, novaMarca);
         }
     }
 }
