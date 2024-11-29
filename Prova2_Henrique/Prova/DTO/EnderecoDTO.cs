@@ -1,5 +1,3 @@
-using System;
-
 namespace Prova.DTOs
 {
     public class EnderecoDTO

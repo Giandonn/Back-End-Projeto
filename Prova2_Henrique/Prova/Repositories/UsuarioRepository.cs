@@ -1,9 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using Prova.Data;
-using Prova.Models;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Prova.Repositories
 {
@@ -21,7 +17,7 @@ namespace Prova.Repositories
             return await _context.Usuarios.ToListAsync();
         }
 
-        public async Task<Usuario> GetByEmailAsync(string email)
+        public async Task<Usuario> GetPorEmailAssincrono(string email)
         {
             return await _context.Usuarios
                 .Include(u => u.Enderecos)

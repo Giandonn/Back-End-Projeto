@@ -16,27 +16,21 @@ builder.Services.AddCors(options =>
     });
 });
 
-// Registro dos repositórios e serviços
 builder.Services.AddScoped<MarcaRepository>();
 builder.Services.AddScoped<ProdutoRepository>();
 builder.Services.AddScoped<MarcaService>();
 builder.Services.AddScoped<ProdutoService>();
 
-// Registro do UsuarioRepository
-builder.Services.AddScoped<UsuarioRepository>(); // Adicionando o registro do UsuarioRepository
+builder.Services.AddScoped<UsuarioRepository>(); 
 
-// Registro do UsuarioService
-builder.Services.AddScoped<UsuarioService>(); // Registro do UsuarioService
+builder.Services.AddScoped<UsuarioService>();
 
-// Registro do JwtTokenService
-builder.Services.AddSingleton<JwtService>(); // Registro do JwtTokenService
+builder.Services.AddSingleton<JwtService>(); 
 
-// Configuração do DbContext
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
 );
 
-// Configuração dos controllers e Swagger
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Prova.Migrations
 {
     /// <inheritdoc />
-    public partial class mudandoOTipoDaIamgemNovamente18 : Migration
+    public partial class euteamoluquinhas : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

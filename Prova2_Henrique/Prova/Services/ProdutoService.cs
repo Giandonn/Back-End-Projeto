@@ -1,7 +1,5 @@
 using Prova.Repositories;
 using Prova.Models;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Prova.Services
 {

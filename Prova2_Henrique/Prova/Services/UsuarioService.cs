@@ -1,7 +1,5 @@
 using Prova.Repositories;
 using Prova.Models;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Prova.DTOs;
 using Prova.DTO;
 
@@ -26,7 +24,7 @@ namespace Prova.Services
             if (!ValidarCPF(usuarioDto.Cpf))
                 throw new ArgumentException("CPF inválido.");
 
-            var emailExistente = await _usuarioRepository.GetByEmailAsync(usuarioDto.Email);
+            var emailExistente = await _usuarioRepository.GetPorEmailAssincrono(usuarioDto.Email);
             if (emailExistente != null)
                 throw new InvalidOperationException("Já existe um usuário com este email.");
 
@@ -64,7 +62,7 @@ namespace Prova.Services
 
         public async Task AtualizarUsuario(string email, UsuarioAtualizacaoDTO usuarioAtualizado)
         {
-            var usuarioExistente = await _usuarioRepository.GetByEmailAsync(email);
+            var usuarioExistente = await _usuarioRepository.GetPorEmailAssincrono(email);
             if (usuarioExistente == null)
                 throw new InvalidOperationException("Usuário não encontrado.");
 
@@ -98,7 +96,7 @@ namespace Prova.Services
             if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(senha))
                 throw new ArgumentException("Email e senha são obrigatórios.");
 
-            var usuario = await _usuarioRepository.GetByEmailAsync(email);
+            var usuario = await _usuarioRepository.GetPorEmailAssincrono(email);
             if (usuario == null || usuario.Senha != senha)
                 throw new InvalidOperationException("Email ou senha inválidos.");
 

@@ -18,14 +18,14 @@ namespace Prova.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Produto>>> GetAllProdutos()
+        public async Task<ActionResult<IEnumerable<Produto>>> GetTodosProdutos()
         {
             var produtos = await _produtoService.GetAllAsync();
             return Ok(produtos);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Produto>> GetProdutoById(int id)
+        public async Task<ActionResult<Produto>> GetProdutoPorId(int id)
         {
             var produto = await _produtoService.GetByIdAsync(id);
             if (produto == null)
@@ -38,8 +38,8 @@ namespace Prova.Controllers
         [HttpPost]
         public async Task<ActionResult<Produto>> CreateProduto(Produto produto)
         {
-            var newProduto = await _produtoService.AddAsync(produto);
-            return CreatedAtAction(nameof(GetProdutoById), new { id = newProduto.Id }, newProduto);
+            var novoProduto = await _produtoService.AddAsync(produto);
+            return CreatedAtAction(nameof(GetProdutoPorId), new { id = novoProduto.Id }, novoProduto);
         }
 
         [HttpDelete]

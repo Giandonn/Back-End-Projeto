@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using Prova.DTOs;
-using Prova.Models;
 using Prova.Services;
 
 namespace Prova.Controllers
