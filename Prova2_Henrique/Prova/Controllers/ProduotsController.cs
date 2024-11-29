@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Prova.Models;
-using Prova.Services;
+using Core.Models;
+using Core.Services;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Prova.Controllers
+namespace Core.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
