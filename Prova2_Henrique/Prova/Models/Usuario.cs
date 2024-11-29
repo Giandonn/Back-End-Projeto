@@ -15,6 +15,10 @@ namespace Prova.Models {
 		public string Telefone { get; set; } = string.Empty;
 		public string Email { get; set; } = string.Empty;
 		public string Senha { get; set; } = string.Empty;
+		public string Cpf { get; set; } = string.Empty;
+
+		public string Imagem { get; set; } = string.Empty;
+
         public DateTime DataNascimento { get; set; }
 
         [NotMapped] 
@@ -24,13 +28,15 @@ namespace Prova.Models {
 
 		public Usuario() { } 
 
-		public Usuario(string nome, string sobrenome, string telefone, string email, string senha, DateTime dataNascimento) {
+		public Usuario(string nome, string sobrenome, string telefone, string email, string senha, DateTime dataNascimento, string cpf, string imagem) {
 			Nome = nome;
 			Sobrenome = sobrenome;
 			Telefone = telefone;
 			Email = email;
 			Senha = senha;
-            DataNascimento = dataNascimento; 
+            DataNascimento = dataNascimento;
+			Cpf = cpf;
+			Imagem = imagem;
 
         }
 	}

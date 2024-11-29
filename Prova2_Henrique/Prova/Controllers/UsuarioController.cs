@@ -32,7 +32,14 @@ namespace Prova.Controllers {
 				return Conflict("J� existe um usu�rio com este email.");
 			}
 
-			try {
+            var cpfValidar = await _context.Usuarios.AnyAsync(u => u.Cpf == usuario.Cpf);
+            if (!ValidarCPF(usuario.Cpf))
+            {
+                return BadRequest("CPF inválido.");
+            }
+
+            try
+            {
 				_context.Usuarios.Add(usuario);
 				if (usuario.Enderecos != null) {
 					foreach (var endereco in usuario.Enderecos) {
@@ -115,5 +122,53 @@ namespace Prova.Controllers {
             return Ok(usuario);
         }
 
+
+        private bool ValidarCPF(string cpf)
+        {
+            if (string.IsNullOrEmpty(cpf))
+            {
+                return false;
+            }
+
+            cpf = new string(cpf.Where(char.IsDigit).ToArray());
+
+            if (cpf.Length != 11)
+            {
+                return false;
+            }
+
+            if (cpf.All(c => c == cpf[0]))
+            {
+                return false;
+            }
+
+            int soma1 = 0;
+            for (int i = 0; i < 9; i++)
+            {
+                soma1 += int.Parse(cpf[i].ToString()) * (10 - i);
+            }
+
+            int resto1 = soma1 % 11;
+            int digito1 = (resto1 < 2) ? 0 : 11 - resto1;
+            if (digito1 != int.Parse(cpf[9].ToString()))
+            {
+                return false;
+            }
+
+            int soma2 = 0;
+            for (int i = 0; i < 10; i++)
+            {
+                soma2 += int.Parse(cpf[i].ToString()) * (11 - i);
+            }
+
+            int resto2 = soma2 % 11;
+            int digito2 = (resto2 < 2) ? 0 : 11 - resto2;
+            if (digito2 != int.Parse(cpf[10].ToString()))
+            {
+                return false;
+            }
+
+            return true;
+        }
     }
 }
