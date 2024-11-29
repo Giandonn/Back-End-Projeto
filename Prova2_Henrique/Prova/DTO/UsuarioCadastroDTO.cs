@@ -14,12 +14,12 @@ namespace Prova.DTOs
         public string Senha { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public string Cpf { get; set; } = string.Empty;
+        public string Cep { get; set; } = string.Empty;
+
 
         [NotMapped]
         [JsonIgnore]
         public IFormFile? Imagem { get; set; }
-
-        public List<EnderecoDTO> Enderecos { get; set; } = new List<EnderecoDTO>();
 
     }
 }

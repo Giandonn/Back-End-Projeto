@@ -22,33 +22,6 @@ namespace Prova.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Prova.Models.Endereco", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Cep")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Cidade")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Estado")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("UsuarioId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UsuarioId");
-
-                    b.ToTable("Enderecos");
-                });
-
             modelBuilder.Entity("Prova.Models.Marca", b =>
                 {
                     b.Property<int>("Id")
@@ -108,6 +81,10 @@ namespace Prova.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Cep")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Cpf")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -140,17 +117,6 @@ namespace Prova.Migrations
                     b.ToTable("Usuarios");
                 });
 
-            modelBuilder.Entity("Prova.Models.Endereco", b =>
-                {
-                    b.HasOne("Usuario", "Usuario")
-                        .WithMany("Enderecos")
-                        .HasForeignKey("UsuarioId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Usuario");
-                });
-
             modelBuilder.Entity("Prova.Models.Produto", b =>
                 {
                     b.HasOne("Prova.Models.Marca", null)
@@ -164,11 +130,6 @@ namespace Prova.Migrations
                         .HasForeignKey("MarcaId");
 
                     b.Navigation("Marca");
-                });
-
-            modelBuilder.Entity("Usuario", b =>
-                {
-                    b.Navigation("Enderecos");
                 });
 #pragma warning restore 612, 618
         }
