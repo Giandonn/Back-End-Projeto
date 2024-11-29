@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
-using Prova.DTOs;
-using Prova.Models;
-using Prova.Services;
+using Core.DTOs;
+using Core.Models;
+using Core.Services;
 
-namespace Prova.Controllers
+namespace Core.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]

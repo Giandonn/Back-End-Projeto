@@ -1,7 +1,9 @@
+using Core.Repositories;
+using Core.Services;
+using Infrastructure.Repositories.Data;
 using Microsoft.EntityFrameworkCore;
-using Prova.Data;
-using Prova.Repositories;
-using Prova.Services;
+
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +23,7 @@ builder.Services.AddScoped<MarcaRepository>();
 builder.Services.AddScoped<ProdutoRepository>();
 builder.Services.AddScoped<MarcaService>();
 builder.Services.AddScoped<ProdutoService>();
+
 
 // Registro do UsuarioRepository
 builder.Services.AddScoped<UsuarioRepository>(); // Adicionando o registro do UsuarioRepository
