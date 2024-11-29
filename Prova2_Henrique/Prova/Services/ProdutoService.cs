@@ -23,7 +23,7 @@ namespace Prova.Services
         {
             return await _produtoRepository.GetByIdAsync(id);
         }
-
+            
         public async Task<Produto> AddAsync(Produto produto)
         {
             return await _produtoRepository.AddAsync(produto);
@@ -33,5 +33,16 @@ namespace Prova.Services
         {
             await _produtoRepository.DeleteAllAsync(); 
         }
+        public async Task<Produto> UpdateByNameAsync(string nome, Produto produtoAtualizado)
+        {
+            if (string.IsNullOrWhiteSpace(nome) || produtoAtualizado == null)
+            {
+                return null;
+            }
+
+            return await _produtoRepository.UpdateByNameAsync(nome, produtoAtualizado);
+        }
+
+
     }
 }

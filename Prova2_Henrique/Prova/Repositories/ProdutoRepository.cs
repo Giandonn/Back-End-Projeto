@@ -38,8 +38,27 @@ namespace Prova.Repositories
             if (produtos != null && produtos.Count > 0)
             {
                 _context.Produtos.RemoveRange(produtos);
-                await _context.SaveChangesAsync(); 
+                await _context.SaveChangesAsync();
             }
+        }
+
+        public async Task<Produto> UpdateByNameAsync(string nome, Produto produtoAtualizado)
+        {
+            var produtoExistente = await _context.Produtos.FirstOrDefaultAsync(p => p.Nome == nome);
+
+            if (produtoExistente == null)
+            {
+                return null;
+            }
+
+            produtoExistente.Nome    = produtoAtualizado.Nome;
+            produtoExistente.Descricao = produtoAtualizado.Descricao;
+            produtoExistente.Preco = produtoAtualizado.Preco;
+
+
+            await _context.SaveChangesAsync();
+
+            return produtoExistente; 
         }
     }
 }
