@@ -17,6 +17,7 @@ namespace Prova.Controllers
             _marcaService = marcaService;
         }
 
+
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Marca>>> GetAllMarcas()
         {
