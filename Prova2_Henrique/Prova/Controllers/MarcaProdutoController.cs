@@ -78,5 +78,23 @@ namespace Prova.Controllers
             return NoContent(); 
         }
 
+        [HttpPut("produtos/{nome}")]
+        public async Task<IActionResult> AtualizarPorNome(string nome, [FromBody] Produto produtoAtualizado)
+        {
+            if (string.IsNullOrWhiteSpace(nome) || produtoAtualizado == null)
+            {
+                return BadRequest(new { mensagem = "Nome ou dados inválidos para atualização." });
+            }
+
+            var produto = await _produtoService.UpdateByNameAsync(nome, produtoAtualizado);
+
+            if (produto == null)
+            {
+                return NotFound(new { mensagem = "Produto com o nome especificado não foi encontrado." });
+            }
+
+            return Ok(new { mensagem = "Produto atualizado com sucesso!", produto });
+        }
+
     }
 }
