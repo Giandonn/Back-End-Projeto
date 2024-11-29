@@ -20,9 +20,9 @@ builder.Services.AddScoped<ProdutoRepository>();
 builder.Services.AddScoped<MarcaService>();
 builder.Services.AddScoped<ProdutoService>();
 
-builder.Services.AddScoped<UsuarioRepository>(); 
+builder.Services.AddScoped<UsuarioRepository>();
 
-builder.Services.AddScoped<UsuarioService>(); 
+builder.Services.AddScoped<UsuarioService>();
 
 builder.Services.AddSingleton<JwtService>();
 
