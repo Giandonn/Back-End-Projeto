@@ -3,6 +3,7 @@ using Prova.Models;
 using Prova.Data;
 using Microsoft.EntityFrameworkCore;
 using Prova.Services;
+using Prova.DTOs;
 
 namespace Prova.Controllers
 {
@@ -20,9 +21,10 @@ namespace Prova.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CriarUsuario([FromBody] Usuario usuario)
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> CriarUsuario([FromForm] UsuarioCadastroDTO usuarioDto)
         {
-            if (usuario == null)
+            if (usuarioDto == null)
             {
                 return BadRequest("Dados do usuário não fornecidos.");
             }
@@ -32,42 +34,138 @@ namespace Prova.Controllers
                 return BadRequest(ModelState);
             }
 
-            var emailExistente = await _context.Usuarios.AnyAsync(u => u.Email == usuario.Email);
+            var emailExistente = await _context.Usuarios.AnyAsync(u => u.Email == usuarioDto.Email);
             if (emailExistente)
             {
                 return Conflict("Já existe um usuário com este email.");
             }
 
-            // Validar CPF
-            var cpfValidar = await _context.Usuarios.AnyAsync(u => u.Cpf == usuario.Cpf);
-            if (!ValidarCPF(usuario.Cpf))
+            if (!ValidarCPF(usuarioDto.Cpf))
             {
                 return BadRequest("CPF inválido.");
             }
 
             try
             {
+
+                var usuario = new Usuario
+                {
+                    Nome = usuarioDto.Nome,
+                    Sobrenome = usuarioDto.Sobrenome,
+                    Telefone = usuarioDto.Telefone,
+                    Senha = usuarioDto.Senha,
+                    Cpf = usuarioDto.Cpf,
+                    Email = usuarioDto.Email,
+                };
+
+                if (usuarioDto.Imagem != null)
+                {
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        await usuarioDto.Imagem.CopyToAsync(memoryStream);
+                        byte[] imageBytes = memoryStream.ToArray();
+                        usuario.ImagemBase64 = Convert.ToBase64String(imageBytes);
+                    }
+                }
+
                 _context.Usuarios.Add(usuario);
-                if (usuario.Enderecos != null)
+                await _context.SaveChangesAsync();
+
+
+                if (usuario.Enderecos != null && usuario.Enderecos.Any())
                 {
                     foreach (var endereco in usuario.Enderecos)
                     {
+                        if (string.IsNullOrWhiteSpace(endereco.Cep) || string.IsNullOrWhiteSpace(endereco.Cidade))
+                        {
+                            return BadRequest("Endereço incompleto fornecido.");
+                        }
+
                         endereco.UsuarioId = usuario.Id;
                         _context.Enderecos.Add(endereco);
                     }
                 }
 
-                await _context.SaveChangesAsync();
+
+                await _context.SaveChangesAsync(); 
+
+
 
                 var token = _jwtService.GerarToken(usuario.Nome, usuario.Email);
 
-                return CreatedAtAction(nameof(CriarUsuario), new { id = usuario.Id }, new { usuario, token });
+                return CreatedAtAction(
+                    nameof(CriarUsuario),
+                    new { id = usuario.Id }, 
+                    new
+                    {
+                        token,
+                        usuario = new
+                        {
+                            usuario.Id,
+                            usuario.Nome,
+                            usuario.Sobrenome,
+                            usuario.Telefone,
+                            usuario.Email,
+                            usuario.Cpf,
+                            usuario.Enderecos,
+                            usuario.ImagemBase64
+                        }
+                        
+                    }
+                );
             }
             catch (DbUpdateException ex)
             {
-                return StatusCode(500, "Erro ao salvar os dados: " + ex.Message);
+                var errorMessage = ex.InnerException?.Message ?? ex.Message;
+                return StatusCode(500, "Erro ao salvar os dados: " + errorMessage);
             }
         }
+
+
+        [HttpPut("{email}")]
+        public async Task<IActionResult> AtualizarUsuario(string email, [FromBody] UsuarioAtualizacaoDTO usuarioAtualizado)
+        {
+            if (usuarioAtualizado == null)
+            {
+                return BadRequest("Dados do usu�rio n�o fornecidos.");
+            }
+
+            var usuarioExistente = await _context.Usuarios.FirstOrDefaultAsync(u => u.Email == email);
+            if (usuarioExistente == null)
+            {
+                return NotFound("Usu�rio n�o encontrado.");
+            }
+
+            usuarioExistente.Nome = usuarioAtualizado.Nome;
+            usuarioExistente.Sobrenome = usuarioAtualizado.Sobrenome;
+            usuarioExistente.Telefone = usuarioAtualizado.Telefone;
+            usuarioExistente.Senha = usuarioAtualizado.Senha;
+
+            if (usuarioAtualizado.Enderecos != null && usuarioAtualizado.Enderecos.Count > 0)
+            {
+                var enderecosExistentes = await _context.Enderecos.Where(e => e.UsuarioId == usuarioExistente.Id).ToListAsync();
+                _context.Enderecos.RemoveRange(enderecosExistentes);
+
+                foreach (var enderecoDTO in usuarioAtualizado.Enderecos)
+                {
+                    var endereco = new Endereco
+                    {
+                        Cep = enderecoDTO.Cep,
+                        Cidade = enderecoDTO.Cidade,
+                        Estado = enderecoDTO.Estado,
+                        UsuarioId = usuarioExistente.Id
+                    };
+
+                    _context.Enderecos.Add(endereco);
+                }
+            }
+
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+
 
         [HttpGet("login")]
         public async Task<IActionResult> GetUsuarioPorEmailSenha([FromQuery] string email, [FromQuery] string senha, [FromQuery] string token)

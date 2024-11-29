@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Prova.Data;
 
@@ -11,9 +12,11 @@ using Prova.Data;
 namespace Prova.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241129072043_mudandoOTipoDaIamgemNovamente2")]
+    partial class mudandoOTipoDaIamgemNovamente2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -100,7 +103,7 @@ namespace Prova.Migrations
                     b.ToTable("Produtos");
                 });
 
-            modelBuilder.Entity("Usuario", b =>
+            modelBuilder.Entity("Prova.Models.Usuario", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -116,6 +119,10 @@ namespace Prova.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Imagem")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -142,7 +149,7 @@ namespace Prova.Migrations
 
             modelBuilder.Entity("Prova.Models.Endereco", b =>
                 {
-                    b.HasOne("Usuario", "Usuario")
+                    b.HasOne("Prova.Models.Usuario", "Usuario")
                         .WithMany("Enderecos")
                         .HasForeignKey("UsuarioId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -166,7 +173,7 @@ namespace Prova.Migrations
                     b.Navigation("Marca");
                 });
 
-            modelBuilder.Entity("Usuario", b =>
+            modelBuilder.Entity("Prova.Models.Usuario", b =>
                 {
                     b.Navigation("Enderecos");
                 });
